@@ -3,11 +3,9 @@ class ispconfig_packages {
   include devutils
 
   if $::lsbdistcodename == 'hardy' {
-    php5::module { 'mhash': }
-    Php5::Module { ensure => present}
+    softec_php::module { 'mhash': }
   }
   else {
-    Php5::Module { ensure => 'pin'}
     package{'apache2-suexec-custom': ensure => present }
   }
 
@@ -25,45 +23,29 @@ class ispconfig_packages {
     'bison':                    ensure => present;
 	}
 
-  php5::module { 'dev': }
-  php5::module { 'curl': }
-  php5::module { 'gd': }
-  php5::module { 'imap': }
-  php5::module { 'mcrypt': }
-  php5::module { 'mysql': }
-  php5::module { 'pspell': }
-  php5::module { 'recode': }
-  php5::module { 'snmp': }
-  php5::module { 'sqlite': }
-  php5::module { 'tidy': }
-  php5::module { 'xmlrpc': }
-  php5::module { 'xsl': }
+  softec_php::module { 'curl': }
+  softec_php::module { 'gd': }
+  softec_php::module { 'imap': }
+  softec_php::module { 'mcrypt': }
+  softec_php::module { 'mysql': }
+  softec_php::extension { 'dev': }
+  softec_php::extension { 'pspell': }
+  softec_php::extension { 'recode': }
+  softec_php::extension { 'snmp': }
+  softec_php::extension { 'sqlite': }
+  softec_php::extension { 'tidy': }
+  softec_php::extension { 'xmlrpc': }
+  softec_php::extension { 'xsl': }
 
-  if !defined(Php5::Module['ldap']) {
-    php5::module{ 'ldap':
-      ensure  => 'pin',
-    }
+  if !defined(Softec_php::Module['ldap']) {
+    softec_php::module{ 'ldap':}
   }
 
-  # Packages not taken from ondrej, so no pin
-  php5::module { 'imagick':
-    ensure => present;
-  }
+  include softec_php::imagick
+  include softec_php::memcache
+  include softec_php::uploadprogress
 
-  include php5::memcache
-  include php5::uploadprogress
-
-  php5::module { 'ming':
-    ensure => present;
-  }
-
-  file { '/etc/php5/conf.d/ming.ini':
-    ensure  => 'present',
-    mode    => 0644,
-    owner   => 'root',
-    group   => 'root',
-    source  => 'puppet:///modules/php5/ming.ini'
-  }
+  include softec_php::ming
 
   include apache2::mod::status
   include apache2::mod::proxy
