@@ -47,8 +47,8 @@ class ispconfig_packages {
 
   include softec_php::ming
 
-  include apache2::mod::status
-  include apache2::mod::proxy
+  include softec_apache::mod::status
+  include apache::mod::proxy
 
   file { '/etc/php5/conf.d/idn.ini':
     ensure  => absent,
