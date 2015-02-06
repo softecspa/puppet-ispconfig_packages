@@ -41,6 +41,7 @@ class ispconfig_packages {
     softec_php::module{ 'ldap':}
   }
 
+  include softec_php::cli
   include softec_php::imagick
   include softec_php::memcache
   include softec_php::uploadprogress
